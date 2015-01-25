@@ -117,9 +117,17 @@ void CellRenderer::render(const Cell &cell, const QPointF &pos, Origin origin)
     const QPoint offset = cell.tile->tileset()->tileOffset();
     const QPointF sizeHalf = QPointF(size.width() / 2, size.height() / 2);
 
+    // Cell size is fixed to 86x43, get half size to set position correctly.
+    float cellHalfWidth = 43;
+    float cellHalfHeight = 21.5;
+
+    QPointF originalOffset;
+    originalOffset.setX(cell.tile->property(QLatin1String("originalX")).toFloat(0));
+    originalOffset.setY(cell.tile->property(QLatin1String("originalY")).toFloat(0));
+
     QPainter::PixmapFragment fragment;
-    fragment.x = pos.x() + offset.x() + sizeHalf.x();
-    fragment.y = pos.y() + offset.y() + sizeHalf.y() - size.height();
+    fragment.x = pos.x() + offset.x() + sizeHalf.x() + cellHalfWidth - originalOffset.x();
+    fragment.y = pos.y() + offset.y() + sizeHalf.y() - cellHalfHeight - originalOffset.y();
     fragment.sourceLeft = 0;
     fragment.sourceTop = 0;
     fragment.width = size.width();
